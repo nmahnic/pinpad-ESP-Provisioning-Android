@@ -94,22 +94,13 @@ class ProvisionActivity : AppCompatActivity() {
 
     private val okBtnClickListener = View.OnClickListener {
         val deviceName = provisionManager?.espDevice?.deviceName
-        val password = provisionManager?.espDevice?.wifiDevice?.password
-        val rssi = provisionManager?.espDevice?.wifiDevice?.rssi
-        val security = provisionManager?.espDevice?.wifiDevice?.security
-        val wifiName = provisionManager?.espDevice?.wifiDevice?.wifiName
-        val versionInfo = provisionManager!!.espDevice.versionInfo
-        Log.d("NM", "deviceName: ${deviceName}")
-        Log.d("NM", "password: ${password}")
-        Log.d("NM", "rssi: ${rssi}")
-        Log.d("NM", "security: ${security}")
-        Log.d("NM", "wifiName: ${wifiName}")
-        Log.d("NM", "versionInfo: ${versionInfo}")
-        Log.d("NM", "ssidValue: ${ssidValue}")
+        Log.d("NM", "deviceName: $deviceName")
+        Log.d("NM", "ssidValue: $ssidValue")
         provisionManager!!.espDevice.disconnectDevice()
         Pinpad.chargeResponse(
-            transactionResult = deviceName.toString(),
-            errorCode = ssidValue.toString()
+            deviceName = deviceName.toString(),
+            ssid = ssidValue.toString(),
+            errorCode = "SUCCESS"
         )
         finish()
     }

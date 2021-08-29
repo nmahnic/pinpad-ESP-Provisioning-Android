@@ -18,18 +18,14 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import com.espressif.AppConstants
 import com.espressif.model.Pinpad
-import com.espressif.model.PpPayment
-import com.espressif.model.PpPaymentResult
+import com.espressif.model.PpInput
 import com.espressif.provisioning.ESPConstants
 import com.espressif.provisioning.ESPProvisionManager
 import com.espressif.wifi_provisioning.R
@@ -78,11 +74,8 @@ class EspMainActivity : AppCompatActivity() {
 
         if (Intent.ACTION_SEND == action && type != null) {
             Pinpad.receiverIntent = intent
-            Pinpad.payment = PpPayment(
-                currency = intent.getStringExtra("currency")!!,
-                currencyCode = intent.getIntExtra("currencyCode", 0),
-                transactionType = intent.getStringExtra("transactionType")!!,
-                amount = intent.getDoubleExtra("amount", -1.0),
+            Pinpad.transaction = PpInput(
+                inputData = intent.getStringExtra("inputData") ?: "",
             )
         }
         Pinpad.sendResponse()
