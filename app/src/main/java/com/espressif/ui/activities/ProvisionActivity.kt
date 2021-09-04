@@ -30,11 +30,13 @@ import com.espressif.provisioning.ESPConstants
 import com.espressif.provisioning.ESPConstants.ProvisionFailureReason
 import com.espressif.provisioning.ESPProvisionManager
 import com.espressif.provisioning.listeners.ProvisionListener
+import com.espressif.provisioning.listeners.ResponseListener
 import com.espressif.wifi_provisioning.R
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.lang.Exception
+import java.util.*
 
 class ProvisionActivity : AppCompatActivity() {
 
@@ -132,6 +134,24 @@ class ProvisionActivity : AppCompatActivity() {
     private fun doProvisioning() {
         tick1!!.visibility = View.GONE
         progress1!!.visibility = View.VISIBLE
+
+        val uuid = UUID.randomUUID().toString().toByteArray()
+        val path = "uuidMash"
+        //provisionManager!!.espDevice.sendDataToCustomEndPoint(path, uuid, CustomDataProvision)
+        espProvision()
+    }
+
+    object CustomDataProvision : ResponseListener {
+        override fun onSuccess(returnData: ByteArray?) {
+            Log.d("NM", "customProvisioning SUCCESS -> ${returnData.toString()}")
+        }
+
+        override fun onFailure(e: Exception?) {
+            Log.d("NM", "customProvisioning FAILURE -> e: ${e}")
+        }
+    }
+
+    private fun espProvision() {
         provisionManager!!.espDevice.provision(
             ssidValue,
             passphraseValue,
@@ -231,7 +251,8 @@ class ProvisionActivity : AppCompatActivity() {
                         hideLoading()
                     }
                 }
-            })
+            }
+        )
     }
 
     private fun showLoading() {
